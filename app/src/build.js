@@ -1,15 +1,14 @@
 // Translated from https://github.com/wasdk/wasmexplorer-service/blob/master/web/build.php
 // FIXME make me node.js friendly and async
 
-const { llvmDir, wasmGCCmd, chiselCmd, wasmdisCmd, pychiselCmd, tempDir, sysroot } = require("../config");
+const { llvmDir, wasmGCCmd, wasmdisCmd, tempDir, sysroot } = require("../config");
 const { mkdirSync, writeFileSync, existsSync, openSync, closeSync, readFileSync, unlinkSync } = require("fs");
 const { deflateSync } = require("zlib");
 const { dirname } = require("path");
 const { execSync } = require("child_process");
 const { Writable } = require("stream");
 const { exec, joinCmd, exists } = require("./common.js");
-const gcWasm = 'gcWasm.wasm';
-const chiseledWasm = 'chiseledWasmFile.wasm';
+const gcWasm = 'CompiledWasm.wasm';
 const wasmDis = 'wasmDisFile.wat';
 
 
@@ -150,37 +149,10 @@ async function wasmGC(wasmFile) {
     console.log(e.message);
   }
 }
-
-//  extension for chisel -> wasm-chisel is failed to produce proper output 
-// async function chisel(optimisedWasmFile) {
-//   if (!existsSync(optimisedWasmFile)) {
-//     throw new Error("Wasm is not optimised")
-//   }
-//  try{
-//   await exec(joinCmd([chiselCmd, optimisedWasmFile, chiseledWasm])); 
-//   console.log("Chiseled File Name: " + chiseledWasm);
-//   return chiseledWasm;
-//   } catch (e){
-//    return e.message;
-//  }
-// }
-
-// extension for chisel using pywebassembly
-async function chisel(optimisedWasmFile) {
-  if (!existsSync(optimisedWasmFile)) {
-    throw new Error("Wasm is not optimised")
-  }
- try{
-  await exec(joinCmd(['cd', pychiselCmd , '&& python3', 'ewasmify.py', "../../app/" + optimisedWasmFile]));
-  return 'gcWasm_ewasmified.wasm';
-  } catch(e){
-    console.log(e);
-    return e.message;
-  }
-}
   
 //  extension for wasmdis
 async function wasmdis(chiseledWasmFile) {
+  console.log(chiseledWasmFile);
   if (!existsSync(chiseledWasmFile)) {
     throw new Error("Wat file is not found")
   }
@@ -255,13 +227,12 @@ async function build_project_c(project, base) {
     return complete(false, 'Error during linking');
   }
  
- //  extension for wasmGC and chisel and wasmdis
+ //  extension for wasmGC and wasmdis
 
   let test= readFileSync(result);
   writeFileSync('./clang.wasm',test);
   let wasmgcFile = await wasmGC(result);
-  let chiseledFile = await chisel(wasmgcFile);
-  let watFile = await wasmdis(chiseledFile);
+  let watFile = await wasmdis(wasmgcFile);
   if(success)
   return { success, message: "", output: watFile };
   build_result.output = serialize_file_data(watFile, compress);
@@ -325,13 +296,12 @@ async function build_project_cpp(project, base) {
     return complete(false, 'Error during linking');
   }
  
- //  extension for wasmGC and chisel and wasmdis
+ //  extension for wasmGC and wasmdis
 
   let test= readFileSync(result);
   writeFileSync('./clang.wasm',test);
   let wasmgcFile = await wasmGC(result);
-  let chiseledFile = await chisel(wasmgcFile);
-  let watFile = await wasmdis(chiseledFile);
+  let watFile = await wasmdis(wasmgcFile);
   if(success)
   return { success, message: "", output: watFile };
 

@@ -36,12 +36,7 @@ exports.llvmDir = onServer ?
 
 exports.wasmGCCmd = homeDir + '/.cargo/bin/wasm-gc';
 
-// exports.pychiselCmd = homeDir + '/codes/varna/pywebassembly/examples/';
-exports.pychiselCmd = __dirname + '/../pywebassembly/examples/';
-
-// exports.wasmdisCmd = homeDir + '/binaryen-1.37.35/bin/wasm-dis';
 exports.wasmdisCmd = __dirname + '/../binaryen-1.37.35/bin/wasm-dis';
-
 
 exports.tempDir = "/tmp";
 

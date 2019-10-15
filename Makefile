@@ -4,8 +4,6 @@ dependencies:
 
 	git clone https://github.com/yurydelendik/wasmception.git 
 	cd wasmception && make
-	
-	git clone https://github.com/poemm/pywebassembly.git 
 
 	curl https://sh.rustup.rs | sh -s -- -y --default-toolchain nightly 
 	# add it to your path
@@ -18,7 +16,6 @@ dependencies:
 	cd binaryen-1.37.35 && cmake . && make
 
 	cargo install wasm-gc
-	cargo install chisel
 	
 prepare:
 	$(MAKE) -f utils/node.mk
