@@ -57,21 +57,21 @@ const {
     try {
       let args = [rustcCmd, rustFile];
       args.push('--target=wasm32-unknown-unknown');
-      args.push('--crate-type=cdylib');
-      if (options.lto)
-        args.push('-Clto');
-      if (options.debug)
-        args.push('-g');
-      switch (options.opt_level) {
-        case 's':
-        case 'z':
-        case '0':
-        case '1':
-        case '2':
-        case '2':
-          args.push('-Copt-level=' + options.opt_level);
-          break;
-      }
+      // args.push('--crate-type=cdylib'); // remove if you are calling normal rust code with main function
+      // if (options.lto)
+      //   args.push('-Clto');
+      // if (options.debug)
+      //   args.push('-g');
+      // switch (options.opt_level) {
+      //   case 's':
+      //   case 'z':
+      //   case '0':
+      //   case '1':
+      //   case '2':
+      //   case '2':
+      //     args.push('-Copt-level=' + options.opt_level);
+      //     break;
+      // }
       args.push('-o');
       args.push(wasmFile);
       for (let i = 0; i < wasmBindgenDeps.length; i++) {
@@ -96,8 +96,12 @@ const {
       try {
         if (!success)
           return { success, message: "", console: output };
+          // return { console: output };
+          console.log(wasmFile)
         let wasm = await readFile(wasmFile);
         let ret = { success, message: output };
+        // let ret = { output };
+
         
         // extension for wasmGC and wasmdis
         await writeFile('./in.wasm', wasm);
