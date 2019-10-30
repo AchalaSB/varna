@@ -13,3 +13,7 @@ wasmDisFile.wat
 binaryen-1.37.35/
 binaryen-1.37.35.tar.gz
 pywebassembly/
+varna_cli/contracts
+varna_cli/data.rs
+varna_cli/data.c
+varna_cli/result.wasm

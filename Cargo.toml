@@ -6,14 +6,14 @@ authors = ["Alex Crichton <alex@alexcrichton.com>", "Achala S <achalasbhatt@gmai
 # libraries for rust contract
 [lib]
 path = "utils/blank.rs"
-crate-type = ["cdylib"]
+# crate-type = ["cdylib"]
 
 [dependencies]
 wasm-bindgen = "0.2"
-ewasm_api = "0.6.0"
+num = "0.2.0"
 
-[profile.release]
-lto = true
-opt-level = 's'
-debug = true
-incremental= false
+# [profile.release]
+# lto = true
+# opt-level = 's'
+# debug = true
+# incremental= false
